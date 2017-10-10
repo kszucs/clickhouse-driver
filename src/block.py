@@ -86,13 +86,19 @@ class Block(object):
         if not self.data:
             return self.data
 
-        n_rows = self.rows
-        n_columns = self.columns
+        # Transpose results: columns -> rows.
+        n_in_row = self.rows
+        n_in_column = self.columns
         # Preallocate memory to avoid .append calls.
-        rv = [None] * n_columns
+        rv = [[None] * n_in_row for j in range(n_in_column)]
 
-        for i in range(n_columns):
-            rv[i] = tuple([self.data[j][i] for j in range(n_rows)])
+        for j in range(n_in_row):
+            column = self.data[j]
+            for i in range(n_in_column):
+                rv[i][j] = column[i]
+
+        for i in range(n_in_column):
+            rv[i] = tuple(rv[i])
 
         return rv
 
